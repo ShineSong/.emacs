@@ -125,13 +125,24 @@
 		     (setq-local flycheck-check-syntax-automatically nil))
 		   (add-hook 'c-mode-common-hook 'my-flycheck-rtags-setup)))
 
-   ;; (:name company-auctex
-   ;; 	  :after (progn
-   ;; 		   (company-auctex-init)))
+   (:name company-auctex
+   	  :after (progn
+   		   (company-auctex-init)))
    
-   ;; (:name company-math
+   (:name company-math
+   	  :after (progn
+		   (eval-after-load 'company
+		     '(add-hook 'company-backends 'company-math-symbols-latex))))
+
+   (:name markdown-mode)
+
+   ;; (:name org-mode
    ;; 	  :after (progn
-   ;; 		   (add-to-list 'company-backends 'company-math-symbols-latex)))
+   ;; 		   (global-set-key "C-c l" 'org-store-link)
+   ;; 		   (global-set-key "C-c a" 'org-agenda)
+   ;; 		   (global-set-key "C-c c" 'org-capture)
+   ;; 		   (global-set-key "C-c b" 'org-iswitchb)
+   ;; 		   (transient-mark-mode 1)))
    
    (:name projectile			; project management
 	  :after (progn
