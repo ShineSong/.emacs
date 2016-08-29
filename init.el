@@ -42,7 +42,7 @@
 	  :after (progn
 		   ;; when using AZERTY keyboard, consider C-x C-_
 		   (global-set-key (kbd "C-x C-/") 'goto-last-change)))
-
+   
    (:name yaml-mode                     ; yaml edit mode
 	  :after (progn
 		   (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
@@ -61,10 +61,16 @@
    
    (:name company-mode			; complete framework
    	  :after (progn
+		   (require 'company)
+		   (require 'cc-mode)
    		   (add-hook 'after-init-hook 'global-company-mode)
    		   (setq company-minimum-prefix-length 0)
    		   (setq company-async-timeout 5)
-   		   (setq company-idle-delay 0.5)))
+   		   (setq company-idle-delay 1)
+
+		   (setq company-backends (delete 'company-semantic company-backends))
+		   (define-key c-mode-map [(tab)] 'company-complete)
+		   (define-key c++-mode-map [(tab)] 'compan-complete)))
    
    (:name irony-mode			; complete backends of c/c++
 	  :after (progn
@@ -97,7 +103,11 @@
    		   (eval-after-load 'company
    		     '(add-to-list
    		       'company-backends 'company-irony-c-headers))))
-
+   
+   (:name function-args			; hint for function arg
+	  :after (progn
+		   (fa-config-default)))
+  
    (:name flycheck			; fly check
 	  :after (progn
 		   (add-hook 'c++-mode-hook 'flycheck-mode)
@@ -107,8 +117,27 @@
 	  :after (progn
 		   (eval-after-load 'flycheck
 		     '(add-hook 'flycheck-mode-hook 'flycheck-irony-setup))))
-   
-   (:name rtags
+   (:name ggtags			; gnu global tags
+	  :after (progn
+		   (require 'ggtags)
+		   (add-hook 'c-mode-common-hook
+			     (lambda()
+			       (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+				 (ggtags-mode 1))))
+		   (define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
+		   (define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
+		   (define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
+		   (define-key ggtags-mode-map (kbd "C-c g f") 'ggtags-find-file)
+		   (define-key ggtags-mode-map (kbd "C-c g c") 'ggtags-create-tags)
+		   (define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags)
+
+		   (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
+		   ; support imenu
+		   (setq-local imenu-create-index-function #'ggtags-build-imenu-index)
+		   (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
+		   ))
+		   
+   (:name rtags				; jump between source/header files
 	  :after (progn
 		   (require 'company-rtags)
 		   (setq rtags-completions-enabled t)
@@ -125,24 +154,32 @@
 		     (setq-local flycheck-check-syntax-automatically nil))
 		   (add-hook 'c-mode-common-hook 'my-flycheck-rtags-setup)))
 
-   (:name company-auctex
+   (:name company-auctex		; complete latex
    	  :after (progn
    		   (company-auctex-init)))
    
-   (:name company-math
+   (:name company-math			; complete latex math equation
    	  :after (progn
 		   (eval-after-load 'company
 		     '(add-hook 'company-backends 'company-math-symbols-latex))))
 
-   (:name markdown-mode)
+   (:name reftex			; reference management of tex
+	  )
 
-   ;; (:name org-mode
-   ;; 	  :after (progn
-   ;; 		   (global-set-key "C-c l" 'org-store-link)
-   ;; 		   (global-set-key "C-c a" 'org-agenda)
-   ;; 		   (global-set-key "C-c c" 'org-capture)
-   ;; 		   (global-set-key "C-c b" 'org-iswitchb)
-   ;; 		   (transient-mark-mode 1)))
+   (:name magic-latex-buffer
+	  )
+   
+   (:name markdown-mode)		; markdown written mode
+
+   (:name org-mode			; organize mode
+   	  :after (progn
+   		   (global-set-key (kbd "C-c l") 'org-store-link)
+   		   (global-set-key (kbd "C-c a") 'org-agenda)
+   		   (global-set-key (kbd "C-c c") 'org-capture)
+   		   (global-set-key (kbd "C-c b") 'org-iswitchb)
+   		   (transient-mark-mode 1)
+		   (add-hook 'org-mode-hook (lambda() (setq truncate-lines nil)))
+		   ))
    
    (:name projectile			; project management
 	  :after (progn
@@ -150,8 +187,14 @@
 		   (setq projectile-require-project-root nil)
 		   (setq project-enable-caching t)
 		   (global-set-key [f5] 'projectile-find-file)
-		   (global-set-key [f6] 'projectile-find-other-file)))
-   (:name helm				
+		   (global-set-key [f6] 'projectile-find-other-file)
+		   (global-set-key (kbd "<f5>") (lambda ()
+                               (interactive)
+                               (setq-local compilation-read-command nil)
+                               (call-interactively 'projectile-compile-project)))
+
+		   ))
+   (:name helm				; interactive window to show much things		
 	  :after (progn
 		   (require 'helm-config)
 		   (global-set-key (kbd "C-c h") 'helm-command-prefix)			; default C-x c is too close to  C-x C-c
@@ -171,12 +214,41 @@
 		   (helm-mode t)
 
 		   ))
-   (:name helm-projectile
+   (:name helm-gtags
+	  :after (progn
+		   (require 'helm-gtags)
+		   (setq
+		    helm-gtags-ignore-case t
+		    helm-gtags-auto-update t
+		    helm-gtags-use-input-at-cursor t
+		    helm-gtags-pulse-at-cursor t
+		    helm-gtags-prefix-key "\C-cg"
+		    helm-gtags-suggested-key-mapping t
+		    )
+
+		   ;; Enable helm-gtags-mode
+		   (add-hook 'dired-mode-hook 'helm-gtags-mode)
+		   (add-hook 'eshell-mode-hook 'helm-gtags-mode)
+		   (add-hook 'c-mode-hook 'helm-gtags-mode)
+		   (add-hook 'c++-mode-hook 'helm-gtags-mode)
+		   (add-hook 'asm-mode-hook 'helm-gtags-mode)
+
+		   (define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
+		   (define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
+		   (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+		   (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+		   (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+		   (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)))
+   
+   (:name helm-projectile		; integrate projectile into helm
 	  :after (progn
 		   (projectile-global-mode)
 		   (setq projectile-completion-system 'helm)
 		   (helm-projectile-on)))
 
+   (:name helm-bibtex			
+	  )
+   
    (:name helm-ros
    	  :type git
    	  :url "git://github.com/davidlandry93/helm-ros.git")
@@ -199,11 +271,27 @@
 				 (vc-status 16 16 :left)
 				 " "
 				 filename-and-process)))))
+
+   (:name helm-shell			; shell in helm
+	  )
+
+   (:name helm-shell-history
+	  )
    
-   (:name multi-term
+   (:name multi-term			; terminal emulator
    	  :after (progn
    		   (setq multi-term-program "bin/bash")
    		   (setq system-uses-terminfo nil)))
+
+   (:name pdf-tools			; pdf reader
+	  )
+   (:name sr-speedbar)			; keep speedbar as a buffer
+		   
+   (:name flyspell-correct
+	  :after (progn
+		   (require 'flyspell-correct-helm)
+		   (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
+		   ))
    ))
 
 ;; set packages without config
@@ -214,7 +302,9 @@
    switch-window			; take over C-x o
    yasnippet				; powerful snippet mode
    magit				; ma git
-   color-theme))
+   color-theme			        ; theme
+   wc					; word count
+   ))
 
 ;;
 ;; Some recipes require extra tools to be installed
@@ -293,6 +383,8 @@
 (setq ido-decorations			; have vertical ido completion lists
       '("\n-> " "" "\n   " "\n   ..." "[" "]"
 	" [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]"))
+
+(add-hook 'c-mode-common-hook 'hs-minor-mode)	; fold and hide blocks of text
 
 (require 'dired-x)			; C-x C-j opens dires with cursor right on the file
 
