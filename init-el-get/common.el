@@ -45,7 +45,7 @@
 		    (setq company-async-timeout 5)
 		    (setq company-idle-delay 1)
 
-		    (setq company-backends (delete 'company-semantic company-backends))
+		    ;; (setq company-backends (delete 'company-semantic company-backends))
 		    (define-key c-mode-map [(tab)] 'company-complete)
 		    (define-key c++-mode-map [(tab)] 'compan-complete)))
     
@@ -98,6 +98,13 @@
     (:name helm-shell)			; shell in helm
     
     (:name helm-shell-history)
+
+    (:name neotree
+	   :after (progn
+		    (global-set-key [f8] 'neotree-toggle)
+		    (setq neo-smart-open t)
+		    (setq projectile-switch-project-action 'neotree-projectile-action)
+		    ))
     )))
 
 ;; set packages without configuration

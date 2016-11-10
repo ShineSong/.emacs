@@ -38,7 +38,18 @@
 		    (require 'flyspell-correct-helm)
 		    (define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-previous-word-generic)
 		    ))
-    
+    (:name auctex
+	   :after (progn
+		    (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+		    (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+		    (add-hook 'LaTeX-mode-hook '(lambda()
+						  (setq TeX-auto-untabify t
+							TeX-engin 'xetex
+							TeX-show-compilation t)
+						  (setq TeX-save-query nil)
+						  (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t))
+						  (setq TeX-command-default "XeLaTeX")
+						  ))))
     (:name company-auctex		; complete latex
 	   :after (progn
 		    (company-auctex-init)))
@@ -53,6 +64,29 @@
     (:name magic-latex-buffer)
 
     (:name helm-bibtex)
+
+    (:name cdlatex-mode)
+
+    (:name chinese-pyim
+	   :type git
+	   :url "git://github.com/tumashu/chinese-pyim.git"
+	   :after (progn
+		    (require 'chinese-pyim)
+		    (setq defaut-input-method "chinese-pyim")
+		    (global-set-key (kbd "C-\\") 'toggle-input-method)
+		    (setq pyim-use-tooltip 'popup)
+		    (setq-default pyim-english-input-switch-functions
+				  '(pyim-probe-program-mode pyim-probe-osg-speed-commands pyim-probe-isearch-mode pyim-probe-org-structure-template))
+		    (setq-default pyim-punctuation-half-width-functions
+				  '(pyim-probe-punctuation-line-beginning pyim-probe-punctuation-after-punctuation))
+		    ))
+    (:name chinese-pyim-greatdict
+	   :type git
+	   :url "git://github.com/tumashu/chinese-pyim-greatdict.git"
+	   :after (progn
+		    (require 'chinese-pyim-greatdict)
+		    (chinese-pyim-greatdict-enable)
+		    ))
     )))
 
 ;; set packages without configuration
@@ -63,4 +97,6 @@
   '(
     ;; uncomment below line to add new package
     ;; template
+    pos-tip
+    popup
     )))

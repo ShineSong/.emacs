@@ -37,7 +37,7 @@
 		    (global-set-key (kbd "<f5>") (lambda ()
 						   (interactive)
 						   (setq-local compilation-read-command nil)
-						   (call-interactively 'projectile-compile-project)))
+						   (call-interactively 'projectile-run-shell-command-in-root)))
 
 		    ))
     
@@ -69,7 +69,7 @@
 	   :feature  "company-irony-c-headers"
 	   :compile "company-irony-c-headers"
 	   :after (progn
-		    (eval-after-load 'company
+		    (eval-after-load 'company-irony
 		      '(add-to-list
 			'company-backends 'company-irony-c-headers))))
     
@@ -157,6 +157,7 @@
 
     (:name helm-ros
 	   :type git
+	   :depend (xterm-color)
 	   :url "git://github.com/davidlandry93/helm-ros.git")
     )))
 
