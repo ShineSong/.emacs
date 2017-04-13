@@ -180,4 +180,7 @@
 (add-hook 'web-mode-hook (lambda() (setq mode-name "w")))
 (add-hook 'emacs-lisp-mode-hook (lambda() (setq mode-name "ελ")))
 
+;; Shortcut key
+(global-set-key (kbd "M-SPC") 'set-mark-command)
+(global-set-key (kbd "<f12>") '(lambda() (interactive) (load-file "~/.emacs.d/init.el")))
 ;;; init-10-face.el ends here

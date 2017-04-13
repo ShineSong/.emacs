@@ -17,7 +17,10 @@
 
 
 ;;; Code:
-
+;; == ROSEMACS ==
+(use-package rosemacs-config
+  :load-path "/opt/ros/kinetic/share/emacs/site-lisp"
+  )
 
 ;; == File types ==
 ;; Web-mode for .launch files (effectively xml)

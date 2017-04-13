@@ -28,5 +28,13 @@
   :config
   (elpy-enable)
   )
+(use-package jedi
+  :ensure helm
+  :config
+  (add-hook 'python-mode-hook 'jedi:setup)
+  (setq jedi:complete-on-dot t)
+  )
+(use-package company-jedi
+  :ensure t)
 
 ;;; init-44-coding-python.el ends here
