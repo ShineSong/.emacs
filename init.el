@@ -83,7 +83,7 @@
 (load-file "~/.emacs.d/config/init-44-coding-python.el")
 (load-file "~/.emacs.d/config/init-45-coding-ROS.el")
 (load-file "~/.emacs.d/config/init-46-coding-rust.el")
-
+(load-file "~/.emacs.d/config/init-47-coding-lisp.el")
 ;; === misc ===
 (load-file "~/.emacs.d/config/init-70-misc-ledger.el")
 
@@ -93,9 +93,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-  '(custom-safe-themes
+ '(custom-safe-themes
    (quote
-    ("c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" default)))
+    ("f78de13274781fbb6b01afd43327a4535438ebaeec91d93ebdbba1e3fba34d3c" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" default)))
+ '(flycheck-c/c++-clang-executable "clang-3.8")
  '(package-selected-packages
    (quote
     (esup smart-mode-line scss-mode flymake-sass sass-mode less-css-mode ledger-mode flycheck-rust rust-mode yaml-mode elpy matlab-mode emmet-mode web-mode cmake-mode google-c-style helm-gtags swift-mode flycheck magit helm-ag ag helm-projectile projectile yasnippet company-irony company auctex markdown-mode helm color-theme-solarized color-theme exec-path-from-shell use-package))))
@@ -104,4 +105,4 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 100 :width normal :foundry "nil" :family "Monaco")))))
+ '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 110 :width normal :foundry "nil" :family "Ubuntu Mono")))))

@@ -14,19 +14,19 @@
 ;; Tools for programming the rust language
 ;;
 
-(use-package rust-mode
-  :ensure t
-  :defer t
-  :init
-  )
+;; (use-package rust-mode
+;;   :ensure t
+;;   :defer t
+;;   :init
+;;   )
 
-(use-package flycheck-rust
-  :ensure t
-  :defer t
-  :init
+;; (use-package flycheck-rust
+;;   :ensure t
+;;   :defer t
+;;   :init
   
-  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+;;   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
 
-  )
+;;   )
 
 ;;; init-46-coding-rust.el ends here

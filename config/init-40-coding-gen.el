@@ -35,6 +35,12 @@
 	company-tooltip-limit           20
 	company-dabbrev-downcase        nil
 	)
+  (use-package company-quickhelp
+    :config
+    (company-quickhelp-mode 1)
+    (eval-after-load 'company
+      '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin))
+    )
   :bind ("C-;" . company-complete-common)
   )
 
@@ -60,7 +66,6 @@
     :after helm
     :config
     (helm-projectile-on)
-    (evil-leader/set-key "s" 'helm-projectile-ag)
     )
   )
 
@@ -93,15 +98,6 @@
             (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)))
 
 
-;; == evil + vimish-fold ==
-(use-package evil-vimish-fold
-  :ensure t
-  :defer t
-  :init
-  (evil-vimish-fold-mode 1)
-  :diminish evil-vimish-fold-mode
-  )
-
 ;; == magit ==
 (use-package magit
   :ensure t
@@ -110,21 +106,6 @@
   :init
   (setq magit-diff-options (quote ("--word-diff")))
   (setq magit-diff-refine-hunk 'all)
-  ;; Use evil keybindings within magit
-  :config
-  (use-package evil-magit
-    :ensure t
-    :config
-    ;; Default commit editor opening in insert mode
-    (add-hook 'with-editor-mode-hook 'evil-insert-state)
-    (evil-define-key 'normal with-editor-mode-map
-      (kbd "RET") 'with-editor-finish
-      [escape] 'with-editor-cancel
-      )
-    (evil-define-key 'normal git-rebase-mode-map
-      "l" 'git-rebase-show-commit
-      )
-    )
   )
 
 ;; == flycheck ==
@@ -139,17 +120,21 @@
   (if (string-equal system-type "gnu/linux")
       (progn
 	(custom-set-variables
-	 '(flycheck-c/c++-clang-executable "clang-3.5")
+	 '(flycheck-c/c++-clang-executable "clang-3.8")
 	 )))
   (add-hook 'c++-mode-hook (lambda () (setq flycheck-clang-language-standard "c++11")))
   (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-gcc))
   )
 
-;; == OTHER LANGUAGES ==
-
-(use-package swift-mode
-  :ensure t
-  :defer t
+;; == highlight-parentheses ==
+(use-package highlight-parentheses
+  :ensure highlight-parentheses
+  :config
+  (global-highlight-parentheses-mode t)
+  (setq hl-paren-colors '("orange1" "pink1"  "red1" "royalblue1" "firebrick1"))
   )
 
+;; == OTHER LANGUAGES ==
+
+(provide 'init-40-coding-gen)
 ;;; init-40-coding-gen.el ends here

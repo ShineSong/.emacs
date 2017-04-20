@@ -15,15 +15,15 @@
 
 ;;; Code:
 
-(use-package ledger-mode
-  :ensure t
-  :defer t
-  :init
-  (add-to-list 'auto-mode-alist '("\\.ledger$" . ledger-mode))
-  :config
-  (use-package flycheck-ledger
-    :ensure t
-    )
-  )
+;; (use-package ledger-mode
+;;   :ensure t
+;;   :defer t
+;;   :init
+;;   (add-to-list 'auto-mode-alist '("\\.ledger$" . ledger-mode))
+;;   :config
+;;   (use-package flycheck-ledger
+;;     :ensure t
+;;     )
+;;   )
 
 
