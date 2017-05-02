@@ -67,6 +67,7 @@
 
 ;; === Face Customization ===
 (load-file "~/.emacs.d/config/init-10-face.el")
+(load-file "~/.emacs.d/config/init-11-term.el")
 
 ;; === Interface ===
 (load-file "~/.emacs.d/config/init-20-nav-interface.el")
