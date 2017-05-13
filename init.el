@@ -85,6 +85,7 @@
 (load-file "~/.emacs.d/config/init-45-coding-ROS.el")
 (load-file "~/.emacs.d/config/init-46-coding-rust.el")
 (load-file "~/.emacs.d/config/init-47-coding-lisp.el")
+(load-file "~/.emacs.d/config/init-48-coding-clojure.el")
 ;; === misc ===
 (load-file "~/.emacs.d/config/init-70-misc-ledger.el")
 
